@@ -40,9 +40,9 @@ namespace eCommerceXZ.API.Controllers
             {
                 ResponseDto result = await _customerValidator.addCustomer(customer);
 
-                var statusRetorned = result.GetType().GetProperty("IsSuccess")?.GetValue(result);
+                bool statusReturned = (bool)result.GetType().GetProperty("IsSuccess")?.GetValue(result);
 
-                if (statusRetorned.ToString() != "true")
+                if (!statusReturned)
                 {
                     return StatusCode(StatusCodes.Status500InternalServerError, result);
                 }
@@ -62,7 +62,7 @@ namespace eCommerceXZ.API.Controllers
         {
             try
             {
-                ResponseDto result  = await _customerValidator.searchCustomer(customer);
+                ResponseDto result  = await _customerValidator.updateCustomer(customer);
                 return StatusCode(StatusCodes.Status200OK, result);
             }
             catch(Exception ex)
@@ -71,16 +71,32 @@ namespace eCommerceXZ.API.Controllers
             }            
         }
 
-        [HttpGet("{id}")]
-        public IActionResult Put(int id, [FromBody] Customer value)
+        [HttpGet("searchCustomer")]
+        public async Task<IActionResult> Get(int customerID, string customerName,string customerEmail)
         {
-            return Ok("Update Customer");
+            try
+            {
+                Customer result = await _customerValidator.searchCustomer(customerID,customerName,customerEmail);
+                return StatusCode(StatusCodes.Status201Created, result);
+            }
+            catch (Exception ex)
+            {
+                return Problem($"An error occurred: {ex.Message}");
+            }
         }
 
         [HttpDelete("{id}")]
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            return Ok("Delete Customer");
+            try
+            {
+                ResponseDto result = await _customerValidator.deleteCustomer(id);
+                return StatusCode(StatusCodes.Status201Created, result);
+            }
+            catch (Exception ex)
+            {
+                return Problem($"An error occurred: {ex.Message}");
+            }
         }
     }
 }

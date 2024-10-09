@@ -57,7 +57,19 @@ namespace eCommerceXZ.Business.Validation
             }
         }
 
-        public async Task<ResponseDto> searchCustomer(Customer customer)
+        public async Task<Customer> searchCustomer(int customerId,string customerName, string customerEmail)
+        {
+            try
+            {
+                return await _customerRepository.GetCustomerByFilter(customerId, customerName, customerEmail);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public async Task<ResponseDto> updateCustomer(Customer customer)
         {
             try
             {
@@ -108,6 +120,24 @@ namespace eCommerceXZ.Business.Validation
 
             return message;
         }
-            
+        public async Task<ResponseDto> deleteCustomer(int customerId)
+        {
+            try
+            {
+                bool resultQ = await _customerRepository.DeleteCustomer(customerId);
+
+                if (resultQ)
+                {
+                    _response.IsSuccess = true;
+                    _response.Result = "Customer deleted";
+                }
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return _response;
+        }
     }
 }

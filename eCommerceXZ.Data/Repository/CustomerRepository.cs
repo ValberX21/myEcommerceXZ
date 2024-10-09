@@ -31,14 +31,44 @@ namespace eCommerceXZ.Data.Repository
             }
         }
 
-        public Task<bool> DeleteCustomer(int CustomerId)
+        public async Task<bool> DeleteCustomer(int customerId)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var customer = await _db.Customer.FindAsync(customerId);
+                if (customer == null)
+                {
+                    throw new Exception("Customer not found.");
+                }
+
+                _db.Customer.Remove(customer);
+                await _db.SaveChangesAsync();
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
-        public Task<Customer> GetCustomerById(int CustomerId)
+        public async Task<Customer> GetCustomerByFilter(int customerId, string customerName, string customerEmail)
         {
-            throw new NotImplementedException();
+            Customer? resultQuery = new Customer();
+
+            try
+            {
+                resultQuery = await _db.Customer.FirstOrDefaultAsync(c => c.CustomerID == customerId ||
+                                                                          c.CustomerName == customerName ||
+                                                                          c.CustomerEmail == customerEmail);
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+            return resultQuery;
         }
 
         public async Task<IEnumerable<Customer>> GetCustomers()
@@ -72,5 +102,7 @@ namespace eCommerceXZ.Data.Repository
             }
             return rquery;
         }
+
+
     }
 }

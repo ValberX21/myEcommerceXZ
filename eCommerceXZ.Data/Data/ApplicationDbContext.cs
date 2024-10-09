@@ -9,7 +9,9 @@ namespace eCommerceXZ.Data.Data
         {
         }
 
-        public DbSet<Customer> Customer { get; set; } // Make sure to match your DbSet name to your model
-        
+        public DbSet<Customer> Customer { get; set; }
+        public DbSet<Order> Orders { get; set; }
+        public DbSet<OrderItem> OrderItems { get; set; }
+        public DbSet<Product> Products { get; set; }
     }
 }

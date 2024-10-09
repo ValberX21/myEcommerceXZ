@@ -13,10 +13,15 @@ var builder = WebApplication.CreateBuilder(args);
 
 
 builder.Services.AddScoped<ResponseDto>();
-builder.Services.AddScoped<CustomerRepository>(); 
+builder.Services.AddScoped<CustomerRepository>();
+builder.Services.AddScoped<OrderRepository>();
+builder.Services.AddScoped<ProductRepository>();
 builder.Services.AddScoped<CustomerValidator>();
-builder.Services.AddScoped<ICustomerValidator,CustomerValidator>(); 
+builder.Services.AddScoped<OrderValidator>();
+builder.Services.AddScoped<ProductValidator>();
 builder.Services.AddScoped<ICustomerRepository,CustomerRepository>();
+builder.Services.AddScoped<IOrderRepository, OrderRepository>();
+builder.Services.AddScoped<IProductRepository, ProductRepository>();
 
 builder.Services.AddControllers()
     .AddJsonOptions(options =>

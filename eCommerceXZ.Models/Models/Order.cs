@@ -11,31 +11,25 @@ namespace eCommerceXZ.Models.Models
     public class Order
     {
         [Key]
-        public int OrderId { get; set; }
+        public int OrderId { get; set; } // Unique identifier for the order
 
-        [Required(ErrorMessage = "Order date is required.")]
-        [DataType(DataType.Date)]
-        public DateTime OrderDate { get; set; }
+        [Required]
+        public int CustomerId { get; set; } // Foreign key to the Customer entity
 
-        [Required(ErrorMessage = "Quantity is required.")]
-        [Range(1, int.MaxValue, ErrorMessage = "Quantity must be at least 1.")]
-        public int Quantity { get; set; }
+        public DateTime OrderDate { get; set; } = DateTime.UtcNow; // The date when the order was created
 
-        [Required(ErrorMessage = "Total price is required.")]
-        [Range(0.01, double.MaxValue, ErrorMessage = "Total price must be greater than 0.")]
-        public decimal TotalPrice { get; set; }
+        public DateTime? ShipDate { get; set; } // Optional: Date when the order was shipped
 
-        [Required(ErrorMessage = "Product ID is required.")]
-        public int ProductId { get; set; }
+        [Required]
+        public string Status { get; set; } = "Pending"; // Order status, e.g., Pending, Shipped, Delivered
 
-        [ForeignKey("ProductId")]
-        public Product Product { get; set; }
+        [Required]
+        public decimal TotalAmount { get; set; } // Total amount of the order
 
-        [ForeignKey("CustomerId")]
-        public Customer Customer { get; set; }
+        public List<OrderItem> OrderItems { get; set; } // List of items in the order
 
-        [Required(ErrorMessage = "Shipping address is required.")]
-        [StringLength(200, ErrorMessage = "Shipping address cannot exceed 200 characters.")]
-        public string ShippingAddress { get; set; }
+        public string ShippingAddress { get; set; } // Address where the order is shipped
+
+        public string PaymentMethod { get; set; } // E.g., Credit Card, PayPal, etc.
     }
 }

@@ -103,6 +103,5 @@ namespace eCommerceXZ.Data.Repository
             return rquery;
         }
 
-
     }
 }

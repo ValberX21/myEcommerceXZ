@@ -33,5 +33,59 @@ namespace eCommerceXZ.API.Controllers
                 return Problem($"An error occurred: {ex.Message}");
             }
         }
+
+
+        [HttpPost("addProducts")]
+        public async Task<IActionResult> Post([FromBody] Product product)
+        {
+            try
+            {
+                ResponseDto result = await _productValidator.addProduct(product);
+
+                bool statusReturned = (bool)result.GetType().GetProperty("IsSuccess")?.GetValue(result);
+
+                if (!statusReturned)
+                {
+                    return StatusCode(StatusCodes.Status500InternalServerError, result);
+                }
+                else
+                {
+                    return StatusCode(StatusCodes.Status201Created, result);
+                }
+            }
+            catch (Exception ex)
+            {
+                return Problem($"An error occurred: {ex.Message}");
+            }
+        }
+
+        [HttpPut("updateProduct")]
+        public async Task<IActionResult> updateProduct([FromBody] Product product)
+        {
+            try
+            {
+                ResponseDto result = await _productValidator.updateProduct(product);
+                return StatusCode(StatusCodes.Status200OK, result);
+            }
+            catch (Exception ex)
+            {
+                return Problem($"An error occurred: {ex.Message}");
+            }
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            try
+            {
+                ResponseDto result = await _productValidator.deleteProduct(id);
+                return StatusCode(StatusCodes.Status201Created, result);
+            }
+            catch (Exception ex)
+            {
+                return Problem($"An error occurred: {ex.Message}");
+            }
+        }
+
     }
 }

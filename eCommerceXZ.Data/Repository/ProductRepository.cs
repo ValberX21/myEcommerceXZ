@@ -22,6 +22,48 @@ namespace eCommerceXZ.Data.Repository
             _response = response;
         }
 
+        public async Task<bool> CreateProduct(Product product)
+        {
+            try
+            {
+                var custom = await _db.Products.AddAsync(product);
+                _db.SaveChangesAsync();
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public async Task<bool> DeleteProduct(int productId)
+        {
+            try
+            {
+                var product = await _db.Products.FindAsync(productId);
+
+                if (product == null)
+                {
+                    throw new Exception("Product not found.");
+                }
+
+                _db.Products.Remove(product);
+                await _db.SaveChangesAsync();
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public Task<Product> GetProductByFilter(int productId)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task<IEnumerable<Product>> listAllProducts()
         {
             List<Product> resultQuery = new List<Product>();
@@ -36,6 +78,22 @@ namespace eCommerceXZ.Data.Repository
             }
 
             return resultQuery;
+        }
+
+        public async Task<string> UpdateProduct(Product product)
+        {
+            string rquery = "";
+            try
+            {
+                _db.Products.Update(product);
+                await _db.SaveChangesAsync();
+                rquery = "Product Updated";
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return rquery;
         }
     }
 }

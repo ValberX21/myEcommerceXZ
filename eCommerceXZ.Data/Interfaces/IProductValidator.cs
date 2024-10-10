@@ -12,7 +12,7 @@ namespace eCommerceXZ.Data.Interfaces
     {
         string ValidateProduct(Product product);
         Task<IEnumerable<Product>> listAllProducts();
-        Task<ResponseDto> updateCustomer(Product product);
+        Task<ResponseDto> updateProduct(Product product);
         Task<Product> searchProduct(int productId);
         Task<ResponseDto> deleteProduct(int productId);
     }

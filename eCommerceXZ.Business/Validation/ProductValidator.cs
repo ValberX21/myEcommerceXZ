@@ -2,6 +2,7 @@
 using eCommerceXZ.Data.Repository;
 using eCommerceXZ.Models.Dtos;
 using eCommerceXZ.Models.Models;
+using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,11 +22,6 @@ namespace eCommerceXZ.Business.Validation
             _response = response;
         }
 
-        public async Task<ResponseDto> deleteProduct(int productId)
-        {
-            throw new NotImplementedException();
-        }
-
         public async Task<IEnumerable<Product>> listAllProducts()
         {
             try
@@ -38,19 +34,84 @@ namespace eCommerceXZ.Business.Validation
             }
         }
 
+        public async Task<ResponseDto> addProduct(Product product)
+        {
+            if (ValidateProduct(product) == "")
+            {
+                try
+                {
+                    bool addProdcut = await _productRepository.CreateProduct(product);
+
+                    if (addProdcut)
+                    {
+                        _response.IsSuccess = true;
+                        _response.Result = "Product added success";
+                    }
+                }
+                catch (Exception ex)
+                {
+                    _response.IsSuccess = false;
+                    _response.Result = ex.Message;
+                }
+            }
+            else
+            {
+                _response.IsSuccess = false;
+                _response.Result = ValidateProduct(product);
+            }
+
+            return _response;
+        }
+
+        public async Task<ResponseDto> deleteProduct(int productId)
+        {
+            try
+            {
+                bool resultQ = await _productRepository.DeleteProduct(productId);
+
+                if (resultQ)
+                {
+                    _response.IsSuccess = true;
+                    _response.Result = "Product deleted";
+                }
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return _response;
+        }
+
         public async Task<Product> searchProduct(int productId)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<ResponseDto> updateCustomer(Product product)
+        public async Task<ResponseDto> updateProduct(Product product)
         {
-            throw new NotImplementedException();
+            try
+            {
+                string resultQ = await _productRepository.UpdateProduct(product);
+
+                if (!resultQ.IsNullOrEmpty())
+                {
+                    _response.IsSuccess = true;
+                    _response.Result = "Product updated";
+                }
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return _response;
         }
 
         public string ValidateProduct(Product product)
         {
             throw new NotImplementedException();
         }
+
     }
 }

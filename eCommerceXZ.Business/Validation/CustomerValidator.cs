@@ -6,7 +6,7 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace eCommerceXZ.Business.Validation
 {
-    public class CustomerValidator: ICustomerValidator
+    public class CustomerValidator : ICustomerValidator
     {
         private readonly CustomerRepository _customerRepository;
         protected ResponseDto _response;
@@ -120,6 +120,7 @@ namespace eCommerceXZ.Business.Validation
 
             return message;
         }
+
         public async Task<ResponseDto> deleteCustomer(int customerId)
         {
             try

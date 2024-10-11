@@ -21,6 +21,50 @@ namespace eCommerceXZ.Data.Repository
             _response = response;
         }
 
+        public async Task<List<Dictionary<int, string>>> CheckProducts(List<OrderItem> Itens)
+        {
+            List<Dictionary<int, string>> existProducts = new List<Dictionary<int, string>>();
+
+            existProducts = null;
+
+            foreach (OrderItem i in Itens)
+            {
+                var product =  _db.Products.Where(x => x.ProductId == i.ProductId).FirstOrDefault();
+
+                if (product == null)
+                {
+                    throw new Exception("Product not found");
+                }
+                else
+                {
+                    if (product.StockQuantity < i.Quantity)
+                    {
+                        existProducts.Add(new Dictionary<int, string> { { product.ProductId, product.Name } });
+                    }
+                    else
+                    {
+                        existProducts.Add(new Dictionary<int, string> { { product.ProductId, "Have no in stock" } });
+                    }
+                }
+            }
+
+            return existProducts;
+        }
+
+        public async Task<Customer> checkCustomer(int customerId)
+        {
+            Customer cust = new Customer();
+            try
+            {
+                return cust = await _db.Customer.FindAsync(customerId);
+               
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("");  
+            }
+        }
+
         public async Task<bool> CreateOrder(Order order)
         {
             try
@@ -51,5 +95,6 @@ namespace eCommerceXZ.Data.Repository
 
             return resultQuery;
         }
+
     }
 }

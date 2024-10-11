@@ -10,5 +10,6 @@ namespace eCommerceXZ.Data.Interfaces
     public interface IOrderRepository
     {
         Task<bool> CreateOrder(Order order);
+        Task<List<Dictionary<int,string>>> CheckProducts(List<OrderItem> Itens);
     }
 }

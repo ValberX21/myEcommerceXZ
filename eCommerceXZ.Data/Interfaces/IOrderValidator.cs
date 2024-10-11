@@ -9,10 +9,10 @@ using System.Threading.Tasks;
 namespace eCommerceXZ.Data.Interfaces
 {
     public interface IOrderValidator
-    {        
-        string ValidateOrder(Order customer);
+    {
+        Task<string> ValidateOrder(Order order);
         Task<IEnumerable<Order>> listAllOrders();
-        Task<ResponseDto> updateCustomer(Order order);
+        Task<ResponseDto> updateOrder(Order order);
         Task<Order> searchOrder(int orderId);
         Task<ResponseDto> deleteOrder(int OrderId);
     }

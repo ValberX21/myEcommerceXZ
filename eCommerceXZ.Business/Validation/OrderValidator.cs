@@ -5,6 +5,7 @@ using eCommerceXZ.Data.Interfaces;
 using eCommerceXZ.Data.Repository;
 using eCommerceXZ.Models.Dtos;
 using eCommerceXZ.Models.Models;
+using System.Collections.Generic;
 
 namespace eCommerceXZ.Business.Validation
 {
@@ -65,20 +66,59 @@ namespace eCommerceXZ.Business.Validation
             throw new NotImplementedException();
         }
 
-        public Task<ResponseDto> updateCustomer(Order order)
+        public Task<ResponseDto> updateOrder(Order order)
         {
             throw new NotImplementedException();
         }
 
-        public string ValidateOrder(Order customer)
+        public async Task<string> ValidateOrder(Order order)
         {
+            //Check if all products exist in the database with the correct quantity
+            List<Dictionary<int, string>> confirmaProducts = new List<Dictionary<int, string>>();
+
+            confirmaProducts = await _orderRepository.CheckProducts(order.OrderItems);
+
+            Customer checkUser = await _orderRepository.checkCustomer(order.CustomerId);
+
+            //Check if the customer exists in the database
+            if (checkUser != null)
+            {
+                paymentValidation(checkUser);
+            }
+            else
+            {
+                throw new Exception("User not found");
+            }                                           
+
+            //Validation Customer role
+
+            //Send to shipping method and wait return
+
             throw new NotImplementedException();
+        }
+
+        public void paymentValidation(Customer customer)
+        {
+            //Validation Customer role
+            if ((customer.CustomerRole == "Silver") || ((customer.CustomerRole == "Gold")))
+            {
+                //Send to Stack
+                //Send to payment method and wait return
+
+                //Check if the payment was successful
+            }
+            else
+            {
+                //Send to queue
+                //Send to payment method and wait return
+
+                //Check if the payment was successful
+            }
         }
 
         public Task<ResponseDto> deleteOrder(int OrderId)
         {
             throw new NotImplementedException();
-        }
-              
+        }              
     }
 }

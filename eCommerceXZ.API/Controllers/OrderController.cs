@@ -42,13 +42,13 @@ namespace eCommerceXZ.API.Controllers
 
                 var statusRetorned = result.GetType().GetProperty("IsSuccess")?.GetValue(result);
 
-                if (statusRetorned.ToString() != "true")
+                if (statusRetorned.ToString() == "true")
                 {
-                    return StatusCode(StatusCodes.Status500InternalServerError, result);
+                    return StatusCode(StatusCodes.Status201Created, result);
                 }
                 else
                 {
-                    return StatusCode(StatusCodes.Status201Created, result);
+                    return StatusCode(StatusCodes.Status500InternalServerError, result);                   
                 }
             }
             catch (Exception ex)

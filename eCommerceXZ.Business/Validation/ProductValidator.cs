@@ -110,7 +110,8 @@ namespace eCommerceXZ.Business.Validation
 
         public string ValidateProduct(Product product)
         {
-            throw new NotImplementedException();
+            return string.Empty;
+            //throw new NotImplementedException();
         }
 
     }

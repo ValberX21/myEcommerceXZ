@@ -15,6 +15,7 @@ namespace eCommerceXZ.Data.Repository
     {
         private readonly ApplicationDbContext _db;
         protected ResponseDto _response;
+        
         public OrderRepository(ApplicationDbContext db, ResponseDto response)
         {
             _db = db;
@@ -23,9 +24,8 @@ namespace eCommerceXZ.Data.Repository
 
         public async Task<List<Dictionary<int, string>>> CheckProducts(List<OrderItem> Itens)
         {
-            List<Dictionary<int, string>> existProducts = new List<Dictionary<int, string>>();
 
-            existProducts = null;
+            List<Dictionary<int, string>> existProducts = new List<Dictionary<int, string>>();
 
             foreach (OrderItem i in Itens)
             {
@@ -37,7 +37,7 @@ namespace eCommerceXZ.Data.Repository
                 }
                 else
                 {
-                    if (product.StockQuantity < i.Quantity)
+                    if (product.StockQuantity >= i.Quantity)
                     {
                         existProducts.Add(new Dictionary<int, string> { { product.ProductId, product.Name } });
                     }

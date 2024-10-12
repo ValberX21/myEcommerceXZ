@@ -158,8 +158,6 @@ namespace eCommerceXZ.Data.Migrations
 
                     b.HasIndex("OrderId");
 
-                    b.HasIndex("ProductId");
-
                     b.ToTable("OrderItems");
                 });
 
@@ -196,21 +194,11 @@ namespace eCommerceXZ.Data.Migrations
 
             modelBuilder.Entity("eCommerceXZ.Models.Models.OrderItem", b =>
                 {
-                    b.HasOne("eCommerceXZ.Models.Models.Order", "Order")
+                    b.HasOne("eCommerceXZ.Models.Models.Order", null)
                         .WithMany("OrderItems")
                         .HasForeignKey("OrderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("eCommerceXZ.Models.Models.Product", "Product")
-                        .WithMany()
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Order");
-
-                    b.Navigation("Product");
                 });
 
             modelBuilder.Entity("eCommerceXZ.Models.Models.Order", b =>

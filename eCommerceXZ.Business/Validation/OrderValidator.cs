@@ -5,6 +5,7 @@ using eCommerceXZ.Data.Interfaces;
 using eCommerceXZ.Data.Repository;
 using eCommerceXZ.Models.Dtos;
 using eCommerceXZ.Models.Models;
+using eCommerceXZ.Payment;
 using System.Collections.Generic;
 
 namespace eCommerceXZ.Business.Validation
@@ -12,20 +13,27 @@ namespace eCommerceXZ.Business.Validation
     public class OrderValidator : IOrderValidator
     {
         private readonly OrderRepository _orderRepository;
+        private readonly MainPayment _mainPayment;
         protected ResponseDto _response;
 
-        public OrderValidator(OrderRepository orderRepository, ResponseDto response)
+        public OrderValidator(OrderRepository orderRepository, ResponseDto response, MainPayment mainPayment)
         {
             _orderRepository = orderRepository;
+            _mainPayment = mainPayment;
             _response = response;
         }
 
         public async Task<ResponseDto> addOrder(Order order)
         {
-            if (ValidateOrder(order) == "")
+            string returnValid = await ValidateOrder(order);
+
+            if (returnValid == "")
             {
                 try
                 {
+
+                    order.Status = "Waiting payment";
+
                     bool addCustomer = await _orderRepository.CreateOrder(order);
 
                     if (addCustomer)
@@ -78,33 +86,34 @@ namespace eCommerceXZ.Business.Validation
 
             confirmaProducts = await _orderRepository.CheckProducts(order.OrderItems);
 
-            Customer checkUser = await _orderRepository.checkCustomer(order.CustomerId);
+            bool containsString = confirmaProducts.Any(value => value.ContainsValue("Have no in stock"));
 
-            //Check if the customer exists in the database
-            if (checkUser != null)
+            if (!containsString)
             {
-                paymentValidation(checkUser);
+                return "";
             }
             else
             {
-                throw new Exception("User not found");
-            }                                           
+                return "Have no itens in stock";
+            }
 
-            //Validation Customer role
+            //return containsString : "" ? ""
 
-            //Send to shipping method and wait return
 
-            throw new NotImplementedException();
+            //if (!containsString)
+            //{
+            //    return string.Empty;             
+            //}            
         }
 
-        public void paymentValidation(Customer customer)
+        public void paymentValidation(Customer customer,Order order)
         {
             //Validation Customer role
             if ((customer.CustomerRole == "Silver") || ((customer.CustomerRole == "Gold")))
             {
                 //Send to Stack
                 //Send to payment method and wait return
-
+                _mainPayment.MainPaymentMethod(customer,order);
                 //Check if the payment was successful
             }
             else

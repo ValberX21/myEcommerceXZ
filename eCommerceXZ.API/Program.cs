@@ -5,6 +5,7 @@ using eCommerceXZ.Data.Data;
 using eCommerceXZ.Data.Interfaces;
 using eCommerceXZ.Data.Repository;
 using eCommerceXZ.Models.Dtos;
+using eCommerceXZ.Payment;
 using Microsoft.EntityFrameworkCore;
 
 
@@ -19,6 +20,7 @@ builder.Services.AddScoped<ProductRepository>();
 builder.Services.AddScoped<CustomerValidator>();
 builder.Services.AddScoped<OrderValidator>();
 builder.Services.AddScoped<ProductValidator>();
+builder.Services.AddScoped<MainPayment>();
 builder.Services.AddScoped<ICustomerRepository,CustomerRepository>();
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();

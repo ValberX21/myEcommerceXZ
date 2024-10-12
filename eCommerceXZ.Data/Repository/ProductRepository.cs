@@ -26,7 +26,7 @@ namespace eCommerceXZ.Data.Repository
         {
             try
             {
-                var custom = await _db.Products.AddAsync(product);
+                var custom =  _db.Products.Add(product);
                 _db.SaveChangesAsync();
 
                 return true;
